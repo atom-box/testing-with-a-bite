@@ -40,16 +40,16 @@ class DinosaurFactoryTest extends TestCase
         $this->markTestIncomplete('Waiting for confirmation from GenLab');
     }
 
-    public function testItGrowsABabyVelociraptor()
-    {
-        if (!class_exists('Nanny')) {
-            $this->markTestSkipped('There is nobody to watch the baby!');
-        }
+    // public function testItGrowsABabyVelociraptor()
+    // {
+    //     if (!class_exists('Nanny')) {
+    //         $this->markTestSkipped('There is nobody to watch the baby!');
+    //     }
 
-        $dinosaur = $this->factory->growVelociraptor(1);
+    //     $dinosaur = $this->factory->growVelociraptor(1);
 
-        $this->assertSame(1, $dinosaur->getLength());
-    }
+    //     $this->assertSame(1, $dinosaur->getLength());
+    // }
 
     /**
      * @dataProvider getSpecificationTests
@@ -67,13 +67,35 @@ class DinosaurFactoryTest extends TestCase
         $this->assertSame(20, $dinosaur->getLength());
     }
 
-    public function getSpecificationTests()
+    /**
+     * @dataProvider getHugeDinosaurSpecTests
+     */
+    public function testItGrowsAHugeDinosaur(string $specification)
+    {
+        $dinosaur = $this->factory->growFromSpecification($specification);
+        $this->assertGreaterThanOrEqual(Dinosaur::HUGE, $dinosaur->getLength());
+    }
+
+    public function getHugeDinosaurSpecTests()
     {
         return [
-            // specification, is large, is carnivorous
-            ['large carnivorous dinosaur', true],
-            'default response' => ['give me all the cookies!!!', false],
-            ['large herbivore', false],
+            ['huge dinosaur'],
+            ['huge dino'],
+            ['huge'],
+            ['OMG'],
+            ['😱'],
         ];
     }
+
+    // public function getSpecificationTests()
+    // {
+    //     return [
+    //         // specification, is large, is carnivorous
+    //         ['large carnivorous dinosaur', true],
+    //         'default response' => ['give me all the cookies!!!', false],
+    //         ['large herbivore', false],
+    //     ];
+    // }
+
+
 }

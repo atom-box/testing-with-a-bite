@@ -9,6 +9,7 @@ class DinosaurFactory
 {
 
     const LARGE = 20;
+    const HUGE = 30;
 
     public function __construct()
     {
@@ -22,13 +23,17 @@ class DinosaurFactory
         return $dinosaur;
     }
 
-    public function growFromSpecification(string $type)
+    public function growFromSpecification(string $specification)
     {
-        $carnivorousness = (strpos($type, 'carnivorous')) ? true : false;
-        $dinosaur = new Dinosaur($type, $carnivorousness);
-        if (strpos($type, 'large') !== false) {
-            $length = random_int(20, 100);
-        } else {
+        $carnivorousness = (strpos($specification, 'carnivorous')) ? true : false;
+        $dinosaur = new Dinosaur($specification, $carnivorousness);
+        if (strpos($specification, 'large') !== false) {
+            $length = random_int(20, HUGE - 1);
+        }
+        if (stripos($specification, 'huge') !== false) {
+            $length = random_int(Dinosaur::HUGE, 100);
+        }
+        if (strpos($specification, 'small') !== false) {
             $length = random_int(5, 10);
         }
         $dinosaur->setLength($length);
