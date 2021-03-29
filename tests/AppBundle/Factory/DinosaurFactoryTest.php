@@ -18,7 +18,8 @@ class DinosaurFactoryTest extends TestCase
 
     public function setUp()
     {
-        $this->factory = new DinosaurFactory();
+        $this->lengthDeterminator = $this->createMock(DinosaurLengthDeterminator::class);
+        $this->factory = new DinosaurFactory($this->lengthDeterminator);
     }
 
     public function testItGrowsAVelociraptor()
@@ -29,5 +30,48 @@ class DinosaurFactoryTest extends TestCase
         $this->assertInternalType('string', $dinosaur->getGenus());
         $this->assertSame('Velociraptor', $dinosaur->getGenus());
         $this->assertSame(5, $dinosaur->getLength());
+    }
+    public function testItGrowsATriceraptors()
+    {
+        $this->markTestIncomplete('Waiting for confirmation from GenLab');
+    }
+    public function testItGrowsABabyVelociraptor()
+    {
+        if (!class_exists('Nanny')) {
+            $this->markTestSkipped('There is nobody to watch the baby!');
+        }
+
+        $dinosaur = $this->factory->growVelociraptor(1);
+
+        $this->assertSame(1, $dinosaur->getLength());
+    }
+
+    /**
+     * @dataProvider getSpecificationTests
+     */
+    public function testItGrowsADinosaurFromSpecification(string $spec, bool $expectLarge, bool $expectCarnivore)
+    {
+        $this->lengthDeterminator->expects($this->once())
+            ->method('getLengthFromSpecification')
+            ->with($spec)
+            ->willReturn(20);
+
+        $dinosaur = $this->factory->growFromSpecification($spec);
+
+        $this->assertSame($expectCarnivore, $dinosaur->isCarnivorous(), 'Diets do not match');
+        if (true === $expectLarge) {
+            $this->assertGreaterThanOrEqual(Dinosaur::LARGE, $dinosaur->getLength());
+        } else {
+            $this->assertLessThanOrEqual(Dinosaur::LARGE, $dinosaur->getLength());
+        }
+        // $this->assertSame(20, $dinosaur->getLength());
+    }
+
+    public function getSpecificationTests()
+    {
+        return [
+            ['large herbivore', true, false],
+            ['invalid thing here', false, false],
+        ];
     }
 }
