@@ -3,18 +3,19 @@
 namespace AppBundle\Factory;
 
 use AppBundle\Entity\Dinosaur;
-use AppBundle\Service\DinosaurLengthDeterminator;
 
 class DinosaurFactory
 {
-
-    const LARGE = 20;
-    const HUGE = 30;
+    const SMALLMIN = 1;
+    const SMALLMAX = 10;
+    const LARGEMIN = 20;
+    const LARGEMAX = 20;
+    const HUGEMIN = 100;
+    const HUGEMAX = 100;
 
     public function __construct()
     {
     }
-
 
     public function growVelociraptor(int $length): Dinosaur
     {
@@ -27,26 +28,82 @@ class DinosaurFactory
     {
         $carnivorousness = (strpos($specification, 'carnivorous')) ? true : false;
         $dinosaur = new Dinosaur($specification, $carnivorousness);
-        if (strpos($specification, 'large') !== false) {
-            $length = random_int(20, HUGE - 1);
-        }
-        if (stripos($specification, 'huge') !== false) {
-            $length = random_int(Dinosaur::HUGE, 100);
-        }
-        if (strpos($specification, 'small') !== false) {
-            $length = random_int(5, 10);
-        }
+        $length = $this->getLengthFromSpecification($specification);
         $dinosaur->setLength($length);
         return $dinosaur;
     }
 
-    public function getLengthFromSpecification($spec)
+    public function getLengthFromSpecification($specification)
     {
         $availableLengths = [
-            'huge' => ['min' => Dinosaur::HUGE, 'max' => 100],
-            'omg' => ['min' => Dinosaur::HUGE, 'max' => 100],
-            '😱' => ['min' => Dinosaur::HUGE, 'max' => 100],
-            'large' => ['min' => Dinosaur::HUGE, 'max' => 100],
+            'small' => ['min' => self::SMALLMIN, 'max' => self::SMALLMAX],
+            'huge' => ['min' => self::HUGEMIN,  'max' =>  self::HUGEMAX],
+            'omg' => ['min' => self::HUGEMIN,  'max' =>  self::HUGEMAX],
+            '😱' => ['min' => self::HUGEMIN,  'max' =>  self::HUGEMAX],
+            'large' => ['min' => self::LARGEMIN,  'max' =>  self::LARGEMAX],
         ];
+
+        $minLength = 1;
+        $maxLength = 1;
+        foreach (explode(' ', $specification) as $keyword) {
+            $keyword = strtolower($keyword);
+            if (array_key_exists($keyword, $availableLengths)) {
+                $minLength = $availableLengths[$keyword]['min'];
+                $maxLength = $availableLengths[$keyword]['max'];
+
+                break;
+            }
+        }
+
+        return random_int($minLength, $maxLength);
     }
 }
+
+
+
+
+
+/*NEXT     ACTION
+
+DO RESUME, PUT IN FEELERS AT
+1) TEAM SOFT
+2) SLACK - get slack for madison on this computer
+
+
+
+
+
+3)
+MAKE THE ONES IN THIS SECTION PASS AND
+GO TO NEXT CHAPTER
+
+HOPE
+VIDEOS GO FASTER NOW
+
+
+GET THE VELOCITY UP
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/

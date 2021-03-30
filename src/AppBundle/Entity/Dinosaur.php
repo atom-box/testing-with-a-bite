@@ -10,8 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Dinosaur
 {
-    const LARGE = 10;
-    const HUGE = 30;
+    const SMALLMIN = 1;
+    const SMALLMAX = 10;
+    const LARGEMIN = 20;
+    const LARGEMAX = 20;
+    const HUGEMIN = 100;
+    const HUGEMAX = 100;
 
     /**
      * @ORM\Id

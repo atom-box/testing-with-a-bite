@@ -40,31 +40,22 @@ class DinosaurFactoryTest extends TestCase
         $this->markTestIncomplete('Waiting for confirmation from GenLab');
     }
 
-    // public function testItGrowsABabyVelociraptor()
-    // {
-    //     if (!class_exists('Nanny')) {
-    //         $this->markTestSkipped('There is nobody to watch the baby!');
-    //     }
-
-    //     $dinosaur = $this->factory->growVelociraptor(1);
-
-    //     $this->assertSame(1, $dinosaur->getLength());
-    // }
+    public function testItGrowsABabyVelociraptor()
+    {
+        if (!class_exists('Nanny')) {
+            $this->markTestSkipped('There is nobody to watch the baby!');
+        }
+    }
 
     /**
      * @dataProvider getSpecificationTests
      */
-    public function testItGrowsADinosaurFromSpecification(string $spec, bool $expectedIsCarnivorous)
+    public function testItGrowsADinosaurFromSpecification(string $specification, bool $expectedIsCarnivorous)
     {
-        $this->lengthDeterminator->expects($this->once())
-            ->method('getLengthFromSpecification')
-            ->with($spec)
-            ->willReturn(20);
 
-        $dinosaur = $this->factory->growFromSpecification($spec);
+        $dinosaur = $this->factory->growFromSpecification($specification);
 
         $this->assertSame($expectedIsCarnivorous, $dinosaur->isCarnivorous(), 'Diets do not match');
-        $this->assertSame(20, $dinosaur->getLength());
     }
 
     /**
@@ -73,7 +64,7 @@ class DinosaurFactoryTest extends TestCase
     public function testItGrowsAHugeDinosaur(string $specification)
     {
         $dinosaur = $this->factory->growFromSpecification($specification);
-        $this->assertGreaterThanOrEqual(Dinosaur::HUGE, $dinosaur->getLength());
+        $this->assertGreaterThanOrEqual(Dinosaur::HUGEMIN, $dinosaur->getLength());
     }
 
     public function getHugeDinosaurSpecTests()
@@ -87,15 +78,21 @@ class DinosaurFactoryTest extends TestCase
         ];
     }
 
-    // public function getSpecificationTests()
-    // {
-    //     return [
-    //         // specification, is large, is carnivorous
-    //         ['large carnivorous dinosaur', true],
-    //         'default response' => ['give me all the cookies!!!', false],
-    //         ['large herbivore', false],
-    //     ];
-    // }
-
-
+    public function getSpecificationTests()
+    {
+        return [
+            [
+                'large carnivorous dinosaur',
+                true,
+                Dinosaur::LARGEMIN,
+                Dinosaur::LARGEMAX,
+            ],
+            [
+                'small herbivore',
+                false,
+                Dinosaur::SMALLMIN,
+                Dinosaur::SMALLMAX
+            ],
+        ];
+    }
 }
