@@ -5,6 +5,7 @@
 
 namespace AppBundle\Factory;
 
+use AppBundle\Factory\JustConstants;
 use AppBundle\Entity\Dinosaur;
 
 class NotWorkingConstant
@@ -49,11 +50,11 @@ class NotWorkingConstant
     {
         // $dinosaur = $this->factory->growFromSpecification($specification);
         echo "\n";
-        echo (Dinosaur::HUGEMIN);
+        echo (JustConstants::HUGEMIN);
         echo (" is a dino size   :::::::::::::::::\n");
-        echo (Dinosaur::SMALLMAX);
+        echo (JustConstants::SMALLMAX);
         echo (" is a dino size   :::::::::::::::::\n");
-        echo (Dinosaur::LARGEMIN);
+        echo (JustConstants::LARGEMIN);
         echo (" is a dino size   :::::::::::::::::\n");
     }
 
